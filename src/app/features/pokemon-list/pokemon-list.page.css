@@ -1,3 +1,8 @@
+/* Clears the fixed tab bar so the last row is never hidden behind it. */
+.list-content {
+  --padding-bottom: calc(56px + env(safe-area-inset-bottom));
+}
+
 .grid {
   display: grid;
   /* 2-up on mobile per wireframe; widens with the viewport. */
@@ -50,6 +55,11 @@
   padding: 8px 16px 32px;
 }
 
+/* Zero-height marker the IntersectionObserver watches. */
+.scroll-sentinel {
+  height: 1px;
+}
+
 /* Segment lives in the desktop header only; mobile uses the bottom tab bar. */
 .nav-segment {
   display: none;
@@ -62,6 +72,11 @@
 }
 
 @media (min-width: 1024px) {
+  /* No tab bar at this width, so the reserved space goes away. */
+  .list-content {
+    --padding-bottom: 0;
+  }
+
   .grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     padding: 24px;

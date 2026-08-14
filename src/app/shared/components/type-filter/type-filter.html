@@ -19,8 +19,9 @@
   }
 </div>
 
-<!-- Mobile: floating trigger, dot badge while filters are active. -->
-<ion-fab class="filter-fab" slot="fixed" vertical="bottom" horizontal="end">
+<!-- Mobile: floating trigger, dot badge while filters are active. Positioned by
+     our own CSS so it clears the tab bar and does not need ion-content's slot. -->
+<div class="filter-fab">
   <ion-fab-button
     [attr.aria-label]="
       hasSelection()
@@ -34,7 +35,7 @@
       <span class="filter-fab__dot" aria-hidden="true"></span>
     }
   </ion-fab-button>
-</ion-fab>
+</div>
 
 <ion-modal
   [isOpen]="sheetOpen()"

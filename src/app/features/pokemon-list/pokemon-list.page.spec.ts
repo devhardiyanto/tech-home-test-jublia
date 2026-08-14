@@ -11,6 +11,16 @@ const API = 'https://pokeapi.co/api/v2';
 
 const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
 
+/** jsdom has no IntersectionObserver; the sentinel effect needs one to exist. */
+class ObserverStub {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+}
+
 function detailFixture(id: number): PokemonDetail {
   return {
     id,
@@ -50,6 +60,12 @@ describe('PokemonListPage', () => {
   let http: HttpTestingController;
 
   beforeEach(async () => {
+    Object.defineProperty(globalThis, 'IntersectionObserver', {
+      value: ObserverStub,
+      configurable: true,
+      writable: true,
+    });
+
     await TestBed.configureTestingModule({
       imports: [PokemonListPage],
       providers: [

@@ -31,3 +31,8 @@
   max-width: 42ch;
   color: #616161;
 }
+
+/* Wireframe 1c gives the CTA a generous, easily tappable width. */
+.empty ion-button {
+  min-width: 220px;
+}

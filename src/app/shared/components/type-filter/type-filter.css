@@ -54,6 +54,18 @@
   padding-bottom: 12px;
 }
 
+/* Floats over the grid, bottom-right, clearing the 56px tab bar (wireframe 1a). */
+.filter-fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(56px + 16px + env(safe-area-inset-bottom));
+  z-index: 15;
+}
+
+.filter-fab ion-fab-button {
+  position: relative;
+}
+
 .filter-fab__dot {
   position: absolute;
   top: 6px;
@@ -68,6 +80,11 @@
 @media (min-width: 1024px) {
   .filter-bar {
     display: flex;
+    /* Stays put while the grid scrolls, as in wireframe 1a. */
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--ion-background-color, #fff);
   }
 
   /* Desktop applies filters inline, so the floating trigger is redundant. */

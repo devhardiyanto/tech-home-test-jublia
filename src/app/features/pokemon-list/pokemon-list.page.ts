@@ -1,11 +1,17 @@
-import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  computed,
+  effect,
+  inject,
+  signal,
+  untracked,
+  viewChild,
+} from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
-  InfiniteScrollCustomEvent,
   IonContent,
   IonHeader,
-  IonInfiniteScroll,
-  IonInfiniteScrollContent,
   IonSegment,
   IonSegmentButton,
   IonSpinner,
@@ -28,8 +34,6 @@ const PAGE_SIZE = environment.pageSize;
   imports: [
     IonContent,
     IonHeader,
-    IonInfiniteScroll,
-    IonInfiniteScrollContent,
     IonSegment,
     IonSegmentButton,
     IonSpinner,
@@ -80,7 +84,46 @@ export class PokemonListPage {
       const types = this.selectedTypes();
       untracked(() => void this.applyFilter(types));
     });
+
+    // Scroll-driven paging via a sentinel. Plain IntersectionObserver keeps
+    // this independent of Ionic's scroll internals.
+    effect((onCleanup) => {
+      const el = this.sentinel()?.nativeElement;
+      const content = this.content();
+      // Absent during SSR/prerender; the Load more button still works there.
+      if (!el || !content || typeof IntersectionObserver === 'undefined') return;
+
+      let observer: IntersectionObserver | undefined;
+      let cancelled = false;
+
+      // Observe against ion-content's own scroller, not the viewport: the
+      // viewport root misreports while the app is nested or embedded.
+      void content.getScrollElement().then((root) => {
+        if (cancelled) return;
+
+        observer = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              untracked(() => void this.loadMore());
+            }
+          },
+          // Start fetching slightly before the sentinel scrolls into view.
+          { root, rootMargin: '300px' },
+        );
+        observer.observe(el);
+      });
+
+      onCleanup(() => {
+        cancelled = true;
+        observer?.disconnect();
+      });
+    });
   }
+
+  /** Bottom marker watched by the observer above. */
+  private readonly sentinel = viewChild<ElementRef<HTMLElement>>('sentinel');
+
+  private readonly content = viewChild(IonContent);
 
   private async loadTypes(): Promise<void> {
     try {
@@ -148,12 +191,6 @@ export class PokemonListPage {
   /** Segment is the desktop equivalent of the mobile tab bar. */
   protected onSegmentChange(value: string | number | undefined): void {
     if (value === 'favorites') void this.router.navigate(['/favorites']);
-  }
-
-  /** Scroll-driven paging; the Load more button covers keyboard users. */
-  protected async onInfiniteScroll(event: InfiniteScrollCustomEvent): Promise<void> {
-    await this.loadMore();
-    await event.target.complete();
   }
 
   protected readonly skeletons = Array.from({ length: 8 });

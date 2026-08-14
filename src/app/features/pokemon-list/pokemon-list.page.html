@@ -13,11 +13,13 @@
       <ion-segment-button value="favorites">Favorites</ion-segment-button>
     </ion-segment>
   </ion-toolbar>
-
-  <app-type-filter [types]="types()" [(selected)]="selectedTypes" />
 </ion-header>
 
-<ion-content>
+<ion-content class="list-content">
+  <!-- Lives in the content, not the header: the mobile FAB must float over the
+       grid, and a header ancestor would trap it. -->
+  <app-type-filter [types]="types()" [(selected)]="selectedTypes" />
+
   <p class="sr-only" role="status" aria-live="polite">{{ resultSummary() }}</p>
 
   <div class="grid">
@@ -59,11 +61,9 @@
         </button>
       }
     </div>
-  }
 
-  <!-- Scroll trigger. loadMore() guards on `loading`, so overlapping with the
-       button above cannot double-fetch. -->
-  <ion-infinite-scroll [disabled]="!hasMore() || !!error()" (ionInfinite)="onInfiniteScroll($event)">
-    <ion-infinite-scroll-content loadingSpinner="crescent" />
-  </ion-infinite-scroll>
+    <!-- Scroll trigger. loadMore() guards on `loading`, so the button above
+         cannot double-fetch alongside it. -->
+    <div #sentinel class="scroll-sentinel" aria-hidden="true"></div>
+  }
 </ion-content>

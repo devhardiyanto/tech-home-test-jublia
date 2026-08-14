@@ -1,10 +1,10 @@
 <ion-app>
   <ion-router-outlet />
 
-  <!-- Mobile-only bottom nav; CSS hides it at >=1024px where the header
-       segment takes over. -->
+  <!-- Mobile-only bottom nav. Pinned via CSS, not slot="bottom": that slot is
+       only honoured inside <ion-tabs>, which router-based nav does not use. -->
   @if (showTabs()) {
-    <ion-tab-bar slot="bottom" class="app-tabs">
+    <ion-tab-bar class="app-tabs">
       <ion-tab-button routerLink="/pokemon" [selected]="!onFavorites()">
         <ion-icon [name]="onFavorites() ? 'list-outline' : 'list'" aria-hidden="true" />
         <ion-label>All</ion-label>

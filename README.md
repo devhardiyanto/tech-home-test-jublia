@@ -9,7 +9,7 @@ desktop web app, a mobile web app, and a native Android/iOS app via Ionic + Capa
 
 | Requirement | Where it lives |
 |---|---|
-| Browse via infinite scroll | `features/pokemon-list` — `ion-infinite-scroll` plus a **Load more** button so the feature is reachable by keyboard and screen reader |
+| Browse via infinite scroll | `features/pokemon-list` — an `IntersectionObserver` sentinel rooted on `ion-content`'s scroller, plus a **Load more** button so paging is reachable by keyboard and screen reader |
 | Detailed information | `features/pokemon-detail` — base stats, abilities (hidden flagged), height, weight, types |
 | Image per Pokémon | Official artwork on cards and detail, with the front sprite as fallback |
 | Favourite + favourites list | `core/services/favorites.service.ts` (signals + `localStorage`), `features/favorites` |
@@ -175,3 +175,8 @@ The detail screen has no tab bar at any width — the back arrow is the only way
   backend-for-frontend would fix this properly; it is out of scope here.
 - **No E2E tests.** `ng e2e` ships without a framework in Angular CLI, and adding one
   was not worth the time against unit coverage of the same logic.
+- **Scroll-triggered paging is not automation-verified.** The append itself is covered
+  by `pokemon-list.page.spec.ts` and the **Load more** button was exercised by hand, but
+  the browser used for verification throttled its renderer (no `scroll` events were
+  dispatched even as `scrollTop` changed), so the sentinel could not be observed firing.
+  Worth a manual pass in a normal browser window.

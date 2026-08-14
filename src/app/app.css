@@ -1,3 +1,13 @@
+/* Pin the tab bar to the viewport bottom and keep it above page content.
+   Wireframe 1a/1c: All | Favorites always reachable on mobile. */
+.app-tabs {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 20;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Wireframe puts the tab bar on mobile only; desktop navigates via the
    header segment, so drop it once the viewport can host both side by side. */
 @media (min-width: 1024px) {
