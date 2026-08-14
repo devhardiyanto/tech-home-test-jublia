@@ -28,8 +28,30 @@
 
 <ion-content>
   @if (detail.isLoading()) {
-    <div class="detail__status">
-      <ion-spinner aria-label="Loading Pokémon details" />
+    <!-- Mirrors the real layout so nothing shifts once data lands. -->
+    <div class="detail" role="status" aria-label="Loading Pokémon details">
+      <div class="detail__media">
+        <div class="sk sk--art"></div>
+        <div class="sk sk--facts"></div>
+      </div>
+
+      <div class="detail__body">
+        <div class="sk sk--dex"></div>
+        <div class="sk sk--name"></div>
+        <div class="sk-row">
+          <div class="sk sk--chip"></div>
+          <div class="sk sk--chip"></div>
+        </div>
+
+        <div class="sk sk--heading"></div>
+        @for (row of statSkeletons; track $index) {
+          <div class="sk sk--stat"></div>
+        }
+
+        <div class="sk sk--heading"></div>
+        <div class="sk sk--line"></div>
+        <div class="sk sk--line sk--line-short"></div>
+      </div>
     </div>
   } @else if (detail.error()) {
     <div class="detail__status" role="alert">

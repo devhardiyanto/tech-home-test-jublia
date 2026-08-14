@@ -6,7 +6,6 @@ import {
   IonContent,
   IonHeader,
   IonIcon,
-  IonSpinner,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
@@ -27,7 +26,6 @@ import { StatBar } from '../../shared/components/stat-bar/stat-bar';
     IonContent,
     IonHeader,
     IonIcon,
-    IonSpinner,
     IonTitle,
     IonToolbar,
     StatBar,
@@ -78,6 +76,9 @@ export class PokemonDetailPage {
   protected readonly weightKilos = computed(() => ((this.detail.value()?.weight ?? 0) / 10).toFixed(1));
 
   protected readonly dexNumber = computed(() => `#${String(this.pokemonId()).padStart(4, '0')}`);
+
+  /** One placeholder row per base stat while loading. */
+  protected readonly statSkeletons = STAT_ORDER;
 
   constructor() {
     addIcons({ heart, heartOutline });
