@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 
@@ -17,6 +17,8 @@ export const appConfig: ApplicationConfig = {
       routes,
       // Restores list scroll position on back-nav, per wireframe 1b.
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      // Lets the detail page read `:id` through input() instead of ActivatedRoute.
+      withComponentInputBinding(),
     ),
   ],
 };
