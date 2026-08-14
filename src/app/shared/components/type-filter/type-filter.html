@@ -37,9 +37,8 @@
   </ion-fab-button>
 </div>
 
-<!-- sheet-auto sizes the modal to its content instead of the full screen;
-     see the rule in styles.css. -->
-<ion-modal class="sheet-auto" [isOpen]="sheetOpen()" (ionModalDidDismiss)="closeSheet()">
+<!-- Stock Ionic modal: full screen on phones, centred card from 768px up. -->
+<ion-modal [isOpen]="sheetOpen()" (ionModalDidDismiss)="closeSheet()">
   <ng-template>
     <ion-header>
       <ion-toolbar>
@@ -53,7 +52,9 @@
     </ion-header>
 
     <ion-content class="ion-padding">
-      <div class="sheet-grid" role="group" aria-label="Pokémon types">
+      <!-- Anchors the chips and Apply to the bottom of the full-screen modal. -->
+      <div class="sheet-body">
+        <div class="sheet-grid" role="group" aria-label="Pokémon types">
         @for (type of types(); track type) {
           <button
             type="button"
@@ -63,15 +64,16 @@
             (click)="toggleDraft(type)"
           >
             {{ type }}
-          </button>
-        }
-      </div>
+            </button>
+          }
+        </div>
 
-      <div class="sheet-actions">
-        @if (draft().length) {
-          <ion-button fill="clear" (click)="clearDraft()">Clear</ion-button>
-        }
-        <ion-button expand="block" (click)="apply()">Apply</ion-button>
+        <div class="sheet-actions">
+          @if (draft().length) {
+            <ion-button fill="clear" (click)="clearDraft()">Clear</ion-button>
+          }
+          <ion-button expand="block" (click)="apply()">Apply</ion-button>
+        </div>
       </div>
     </ion-content>
   </ng-template>

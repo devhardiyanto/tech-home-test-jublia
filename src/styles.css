@@ -65,33 +65,6 @@
 .type-chip[data-type='steel'] { background: var(--type-steel); }
 .type-chip[data-type='fairy'] { background: var(--type-fairy); }
 
-/* Bottom sheet that hugs its content. Ionic's breakpoint sheets always fill to
-   the chosen fraction, which left a large gap under short content.
-   These rules must be global: Ionic renders .ion-page outside component scope. */
-ion-modal.sheet-auto {
-  --height: auto;
-  --width: 100%;
-  --border-radius: 16px 16px 0 0;
-}
-
-ion-modal.sheet-auto::part(content) {
-  position: absolute;
-  bottom: 0;
-}
-
-/* `contain: content` is what lets the modal measure its own height. */
-ion-modal.sheet-auto .ion-page {
-  position: relative;
-  display: block;
-  contain: content;
-}
-
-/* Still scrolls if the type list ever outgrows the viewport. */
-ion-modal.sheet-auto ion-content {
-  --overflow: auto;
-  max-height: 75vh;
-}
-
 /* Keep keyboard focus obvious everywhere — Ionic strips it on some controls. */
 :focus-visible {
   outline: 3px solid var(--ion-color-primary, #3880ff);

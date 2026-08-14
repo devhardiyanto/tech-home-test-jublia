@@ -41,6 +41,14 @@
   padding: 12px;
 }
 
+/* Fills the modal so justify-content can push everything to the bottom. */
+.sheet-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 100%;
+}
+
 .sheet-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
