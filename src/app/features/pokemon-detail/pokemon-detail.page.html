@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <!-- Wireframe 1b: back is the only way out of this screen.
+           Icon only; the label stays for screen readers. -->
+      <ion-back-button defaultHref="/pokemon" text="" aria-label="Back to list" />
+    </ion-buttons>
+
+    <ion-title class="detail__title">{{ detail.value()?.name ?? 'Pokémon' }}</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button
+        [attr.aria-pressed]="isFavorite()"
+        [attr.aria-label]="
+          (isFavorite() ? 'Remove from' : 'Add to') + ' favorites'
+        "
+        (click)="toggleFavorite()"
+      >
+        <ion-icon
+          slot="icon-only"
+          [name]="isFavorite() ? 'heart' : 'heart-outline'"
+          [class.detail__heart--on]="isFavorite()"
+          aria-hidden="true"
+        />
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (detail.isLoading()) {
+    <!-- Mirrors the real layout so nothing shifts once data lands. -->
+    <div class="detail" role="status" aria-label="Loading Pokémon details">
+      <div class="detail__media">
+        <div class="sk sk--art"></div>
+        <div class="sk sk--facts"></div>
+      </div>
+
+      <div class="detail__body">
+        <div class="sk sk--dex"></div>
+        <div class="sk sk--name"></div>
+        <div class="sk-row">
+          <div class="sk sk--chip"></div>
+          <div class="sk sk--chip"></div>
+        </div>
+
+        <div class="sk sk--heading"></div>
+        @for (row of statSkeletons; track $index) {
+          <div class="sk sk--stat"></div>
+        }
+
+        <div class="sk sk--heading"></div>
+        <div class="sk sk--line"></div>
+        <div class="sk sk--line sk--line-short"></div>
+      </div>
+    </div>
+  } @else if (detail.error()) {
+    <div class="detail__status" role="alert">
+      <p>Could not load this Pokémon.</p>
+      <button type="button" class="retry" (click)="detail.reload()">Retry</button>
+    </div>
+  } @else if (detail.value(); as pokemon) {
+    <div class="detail">
+      <!-- Left column on desktop: artwork + physical facts. -->
+      <div class="detail__media">
+        <img
+          class="detail__art"
+          [src]="artwork()"
+          [alt]="pokemon.name + ' official artwork'"
+          width="475"
+          height="475"
+          decoding="async"
+        />
+
+        <dl class="facts">
+          <div class="facts__item">
+            <dt>Height</dt>
+            <dd>{{ heightMetres() }} m</dd>
+          </div>
+          <div class="facts__item">
+            <dt>Weight</dt>
+            <dd>{{ weightKilos() }} kg</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Right column on desktop: identity, stats, abilities. -->
+      <div class="detail__body">
+        <p class="detail__dex">{{ dexNumber() }}</p>
+        <h1 class="detail__name">{{ pokemon.name }}</h1>
+
+        <ul class="detail__types">
+          @for (slot of pokemon.types; track slot.type.name) {
+            <li class="type-chip" [attr.data-type]="slot.type.name">{{ slot.type.name }}</li>
+          }
+        </ul>
+
+        <section class="section">
+          <h2 class="section__title">Base stats</h2>
+          @for (stat of stats(); track stat.label) {
+            <app-stat-bar [label]="stat.label" [value]="stat.value" />
+          }
+        </section>
+
+        <section class="section">
+          <h2 class="section__title">Abilities</h2>
+          <ul class="abilities">
+            @for (ability of pokemon.abilities; track ability.ability.name) {
+              <li class="abilities__item">
+                {{ ability.ability.name }}
+                @if (ability.is_hidden) {
+                  <span class="abilities__hidden">(hidden)</span>
+                }
+              </li>
+            }
+          </ul>
+        </section>
+      </div>
+    </div>
+  }
+</ion-content>

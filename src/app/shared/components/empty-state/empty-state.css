@@ -1,0 +1,38 @@
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.empty__icon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  border: 2px dashed rgb(0 0 0 / 0.2);
+  border-radius: 50%;
+  color: #757575;
+}
+
+.empty__icon ion-icon {
+  font-size: 34px;
+}
+
+.empty__title {
+  margin: 8px 0 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.empty__body {
+  margin: 0 0 8px;
+  max-width: 42ch;
+  color: #616161;
+}
+
+/* Wireframe 1c gives the CTA a generous, easily tappable width. */
+.empty ion-button {
+  min-width: 220px;
+}

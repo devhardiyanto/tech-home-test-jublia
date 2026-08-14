@@ -1,0 +1,76 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pokédex</ion-title>
+
+    <!-- Desktop counterpart of the mobile tab bar (wireframe 1a header). -->
+    <ion-segment
+      class="nav-segment"
+      slot="end"
+      value="all"
+      (ionChange)="onSegmentChange($event.detail.value)"
+    >
+      <ion-segment-button value="all">All</ion-segment-button>
+      <ion-segment-button value="favorites">Favorites</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="list-content">
+  <!-- Lives in the content, not the header: the mobile FAB must float over the
+       grid, and a header ancestor would trap it. -->
+  <app-type-filter [types]="types()" [(selected)]="selectedTypes" />
+
+  <p class="sr-only" role="status" aria-live="polite">{{ resultSummary() }}</p>
+
+  <div class="grid">
+    @for (pokemon of items(); track pokemon.id) {
+      <app-pokemon-card
+        [pokemon]="pokemon"
+        [isFavorite]="favorites.isFavorite(pokemon.id)"
+        (favoriteToggled)="onFavoriteToggled($event)"
+      />
+    }
+
+    <!-- Skeletons occupy grid cells so the layout does not jump on append. -->
+    @if (loading()) {
+      @for (skeleton of skeletons; track $index) {
+        <div class="skeleton" aria-hidden="true"></div>
+      }
+    }
+  </div>
+
+  @if (isEmpty()) {
+    <!-- Same treatment as the favorites empty state (wireframe 1c). -->
+    <app-empty-state
+      icon="funnel-outline"
+      title="No matches"
+      [message]="emptyMessage()"
+      [ctaLabel]="hasFilters() ? 'Clear filters' : null"
+      (ctaClicked)="clearFilters()"
+    />
+  }
+
+  @if (error()) {
+    <div class="notice notice--error" role="alert">
+      <p>{{ error() }}</p>
+      <button type="button" class="retry" (click)="loadMore()">Retry</button>
+    </div>
+  }
+
+  <!-- Explicit control so paging is reachable without a mouse wheel. -->
+  @if (hasMore() && !error()) {
+    <div class="load-more">
+      @if (loading()) {
+        <ion-spinner aria-label="Loading more Pokémon" />
+      } @else {
+        <button type="button" class="load-more__button" (click)="loadMore()">
+          Load more Pokémon
+        </button>
+      }
+    </div>
+
+    <!-- Scroll trigger. loadMore() guards on `loading`, so the button above
+         cannot double-fetch alongside it. -->
+    <div #sentinel class="scroll-sentinel" aria-hidden="true"></div>
+  }
+</ion-content>

@@ -1,0 +1,66 @@
+.favorites-content {
+  --padding-bottom: calc(56px + env(safe-area-inset-bottom));
+}
+
+/* Empty state is centred in the free space, as drawn in wireframe 1c. */
+.favorites-content app-empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 100%;
+}
+
+/* Same grid rhythm as the list page so the two screens feel identical. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-grid-gap);
+  padding: 0 16px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.count {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 16px 16px 8px;
+  font-size: 0.8125rem;
+  color: #616161;
+}
+
+.status {
+  display: grid;
+  place-items: center;
+  padding: 32px;
+}
+
+.nav-segment {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .favorites-content {
+    --padding-bottom: 0;
+  }
+
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 0 24px 32px;
+  }
+
+  .count {
+    padding-inline: 24px;
+  }
+
+  .nav-segment {
+    display: flex;
+    width: auto;
+    max-width: 240px;
+    margin-right: 12px;
+  }
+}

@@ -1,0 +1,38 @@
+<article class="card">
+  <!-- Whole tile is the link target; the heart opts out via stopPropagation. -->
+  <a class="card__link" [routerLink]="['/pokemon', pokemon().id]">
+    <div class="card__media">
+      <img
+        class="card__sprite"
+        [src]="pokemon().spriteUrl"
+        [alt]="pokemon().name + ' artwork'"
+        loading="lazy"
+        decoding="async"
+        width="200"
+        height="200"
+      />
+    </div>
+
+    <p class="card__dex">{{ dexNumber }}</p>
+    <h2 class="card__name">{{ pokemon().name }}</h2>
+
+    <ul class="card__types">
+      @for (type of pokemon().types; track type) {
+        <li class="type-chip" [attr.data-type]="type">{{ type }}</li>
+      }
+    </ul>
+  </a>
+
+  <button
+    type="button"
+    class="card__fav"
+    [class.card__fav--on]="isFavorite()"
+    [attr.aria-pressed]="isFavorite()"
+    [attr.aria-label]="
+      (isFavorite() ? 'Remove ' : 'Add ') + pokemon().name + (isFavorite() ? ' from' : ' to') + ' favorites'
+    "
+    (click)="onToggle($event)"
+  >
+    <ion-icon [name]="isFavorite() ? 'heart' : 'heart-outline'" aria-hidden="true" />
+  </button>
+</article>

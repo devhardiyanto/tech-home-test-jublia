@@ -42,3 +42,16 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Capacitor native build output (platform projects themselves are committed)
+/android/app/build/
+/android/build/
+/android/.gradle/
+/android/local.properties
+/android/app/src/main/assets/public/
+/android/app/src/main/res/xml/config.xml
+/ios/App/build/
+/ios/App/Pods/
+/ios/App/App/public/
+/ios/App/App/config.xml
+/ios/DerivedData/
