@@ -11,7 +11,9 @@ import {
   spriteUrlForId,
 } from '../models/pokemon.model';
 
-const API_BASE = 'https://pokeapi.co/api/v2';
+import { environment } from '../../../environments/environment';
+
+const API_BASE = environment.pokeApiBaseUrl;
 
 /** Sole owner of PokeAPI HTTP access — no component calls HttpClient directly. */
 @Service()

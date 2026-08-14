@@ -19,7 +19,9 @@ import { PokemonSummary } from '../../core/models/pokemon.model';
 import { PokemonCard } from '../../shared/components/pokemon-card/pokemon-card';
 import { TypeFilter } from '../../shared/components/type-filter/type-filter';
 
-const PAGE_SIZE = 24;
+import { environment } from '../../../environments/environment';
+
+const PAGE_SIZE = environment.pageSize;
 
 @Component({
   selector: 'app-pokemon-list',
