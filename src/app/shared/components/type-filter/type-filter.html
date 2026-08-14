@@ -37,12 +37,9 @@
   </ion-fab-button>
 </div>
 
-<ion-modal
-  [isOpen]="sheetOpen()"
-  [breakpoints]="[0, 1]"
-  [initialBreakpoint]="1"
-  (ionModalDidDismiss)="closeSheet()"
->
+<!-- sheet-auto sizes the modal to its content instead of the full screen;
+     see the rule in styles.css. -->
+<ion-modal class="sheet-auto" [isOpen]="sheetOpen()" (ionModalDidDismiss)="closeSheet()">
   <ng-template>
     <ion-header>
       <ion-toolbar>
