@@ -26,6 +26,13 @@
   }
 }
 
+/* Matches the favorites screen: centred in the space left below the filter. */
+.list-content app-empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 60vh;
+}
+
 .notice {
   margin: 0;
   padding: 24px 16px;

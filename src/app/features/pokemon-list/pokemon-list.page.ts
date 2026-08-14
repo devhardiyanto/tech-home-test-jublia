@@ -24,6 +24,7 @@ import { FavoritesService } from '../../core/services/favorites.service';
 import { PokemonSummary } from '../../core/models/pokemon.model';
 import { PokemonCard } from '../../shared/components/pokemon-card/pokemon-card';
 import { TypeFilter } from '../../shared/components/type-filter/type-filter';
+import { EmptyState } from '../../shared/components/empty-state/empty-state';
 
 import { environment } from '../../../environments/environment';
 
@@ -41,6 +42,7 @@ const PAGE_SIZE = environment.pageSize;
     IonToolbar,
     PokemonCard,
     TypeFilter,
+    EmptyState,
   ],
   templateUrl: './pokemon-list.page.html',
   styleUrl: './pokemon-list.page.css',
@@ -69,6 +71,16 @@ export class PokemonListPage {
   protected readonly isEmpty = computed(
     () => !this.loading() && this.items().length === 0 && !this.error(),
   );
+
+  protected readonly hasFilters = computed(() => this.selectedTypes().length > 0);
+
+  protected readonly emptyMessage = computed(() => {
+    const types = this.selectedTypes();
+    if (types.length === 0) return 'No Pokémon are available right now.';
+    if (types.length === 1) return `No Pokémon have the ${types[0]} type.`;
+    // Multi-select is an intersection, which is the usual reason for no hits.
+    return `No Pokémon have all of these types at once: ${types.join(', ')}.`;
+  });
 
   /** Announced to screen readers whenever the result set changes size. */
   protected readonly resultSummary = computed(() =>
@@ -186,6 +198,11 @@ export class PokemonListPage {
 
   protected onFavoriteToggled(id: number): void {
     this.favorites.toggle(id);
+  }
+
+  /** CTA on the empty state — drops every active type filter. */
+  protected clearFilters(): void {
+    this.selectedTypes.set([]);
   }
 
   /** Segment is the desktop equivalent of the mobile tab bar. */

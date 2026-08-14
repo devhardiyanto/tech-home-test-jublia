@@ -1,8 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonButton, IonIcon } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { funnelOutline, heartOutline, searchOutline } from 'ionicons/icons';
 
-/** Centred icon + message + optional CTA, used by the favorites screen. */
+/** Centred icon + message + optional CTA, shared by every empty screen. */
 @Component({
   selector: 'app-empty-state',
   imports: [RouterLink, IonButton, IonIcon],
@@ -15,8 +17,13 @@ import { IonButton, IonIcon } from '@ionic/angular/standalone';
       <h2 class="empty__title">{{ title() }}</h2>
       <p class="empty__body">{{ message() }}</p>
 
-      @if (ctaLabel() && ctaLink()) {
-        <ion-button [routerLink]="ctaLink()">{{ ctaLabel() }}</ion-button>
+      @if (ctaLabel()) {
+        <!-- Routes when given a link, otherwise reports back to the parent. -->
+        @if (ctaLink(); as link) {
+          <ion-button [routerLink]="link">{{ ctaLabel() }}</ion-button>
+        } @else {
+          <ion-button (click)="ctaClicked.emit()">{{ ctaLabel() }}</ion-button>
+        }
       }
     </div>
   `,
@@ -28,4 +35,12 @@ export class EmptyState {
   readonly message = input.required<string>();
   readonly ctaLabel = input<string | null>(null);
   readonly ctaLink = input<string | null>(null);
+
+  /** Fired by the CTA when no `ctaLink` is supplied. */
+  readonly ctaClicked = output<void>();
+
+  constructor() {
+    // Registered here so the component works wherever it is dropped in.
+    addIcons({ heartOutline, funnelOutline, searchOutline });
+  }
 }

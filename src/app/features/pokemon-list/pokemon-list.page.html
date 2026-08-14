@@ -40,7 +40,14 @@
   </div>
 
   @if (isEmpty()) {
-    <p class="notice">No Pokémon match that combination of types.</p>
+    <!-- Same treatment as the favorites empty state (wireframe 1c). -->
+    <app-empty-state
+      icon="funnel-outline"
+      title="No matches"
+      [message]="emptyMessage()"
+      [ctaLabel]="hasFilters() ? 'Clear filters' : null"
+      (ctaClicked)="clearFilters()"
+    />
   }
 
   @if (error()) {
