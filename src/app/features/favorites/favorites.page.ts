@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, effect, inject, signal, untracked } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   IonContent,
@@ -42,9 +42,10 @@ export class FavoritesPage {
 
   constructor() {
     // The favourites set is finite and local — no pagination needed here.
+    // untracked keeps the loader off the signals it writes.
     effect(() => {
       const ids = this.favorites.favoriteIds();
-      void this.load(ids);
+      untracked(() => void this.load(ids));
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal, untracked } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import {
   InfiniteScrollCustomEvent,
@@ -72,10 +72,11 @@ export class PokemonListPage {
   constructor() {
     void this.loadTypes();
 
-    // Any filter change restarts pagination from a clean slate.
+    // Any filter change restarts pagination from a clean slate. The load runs
+    // untracked, otherwise it would re-trigger on the signals it writes.
     effect(() => {
       const types = this.selectedTypes();
-      void this.applyFilter(types);
+      untracked(() => void this.applyFilter(types));
     });
   }
 
