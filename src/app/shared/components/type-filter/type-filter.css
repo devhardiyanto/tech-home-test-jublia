@@ -1,0 +1,77 @@
+/* Chip row is desktop-only; below 1024px the FAB + sheet takes over. */
+.filter-bar {
+  display: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid rgb(0 0 0 / 0.08);
+}
+
+.filter-bar__label {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: #616161;
+}
+
+.chip {
+  padding: 6px 14px;
+  border: 1px solid rgb(0 0 0 / 0.25);
+  border-radius: 999px;
+  background: transparent;
+  font-size: 0.8125rem;
+  text-transform: capitalize;
+  color: inherit;
+  cursor: pointer;
+}
+
+.chip--on {
+  border-color: transparent;
+  background: var(--ion-color-primary, #3880ff);
+  color: #fff;
+}
+
+.chip--clear {
+  border-style: dashed;
+  text-transform: none;
+}
+
+.chip--block {
+  width: 100%;
+  padding: 12px;
+}
+
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.sheet-actions {
+  display: grid;
+  gap: 6px;
+  margin-top: 20px;
+  padding-bottom: 12px;
+}
+
+.filter-fab__dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--ion-color-primary-contrast, #fff);
+  border-radius: 50%;
+  background: #e0245e;
+}
+
+@media (min-width: 1024px) {
+  .filter-bar {
+    display: flex;
+  }
+
+  /* Desktop applies filters inline, so the floating trigger is redundant. */
+  .filter-fab {
+    display: none;
+  }
+}

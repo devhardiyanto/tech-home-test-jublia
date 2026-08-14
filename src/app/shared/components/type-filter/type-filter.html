@@ -1,0 +1,80 @@
+<!-- Desktop: inline multi-select chip row. -->
+<div class="filter-bar" role="group" aria-label="Filter by type">
+  <span class="filter-bar__label">TYPE:</span>
+
+  @for (type of types(); track type) {
+    <button
+      type="button"
+      class="chip"
+      [class.chip--on]="isOn(type)"
+      [attr.aria-pressed]="isOn(type)"
+      (click)="toggle(type)"
+    >
+      {{ type }}
+    </button>
+  }
+
+  @if (hasSelection()) {
+    <button type="button" class="chip chip--clear" (click)="clear()">clear</button>
+  }
+</div>
+
+<!-- Mobile: floating trigger, dot badge while filters are active. -->
+<ion-fab class="filter-fab" slot="fixed" vertical="bottom" horizontal="end">
+  <ion-fab-button
+    [attr.aria-label]="
+      hasSelection()
+        ? 'Filter by type, ' + selected().length + ' active'
+        : 'Filter by type'
+    "
+    (click)="openSheet()"
+  >
+    <ion-icon name="funnel" aria-hidden="true" />
+    @if (hasSelection()) {
+      <span class="filter-fab__dot" aria-hidden="true"></span>
+    }
+  </ion-fab-button>
+</ion-fab>
+
+<ion-modal
+  [isOpen]="sheetOpen()"
+  [breakpoints]="[0, 1]"
+  [initialBreakpoint]="1"
+  (ionModalDidDismiss)="closeSheet()"
+>
+  <ng-template>
+    <ion-header>
+      <ion-toolbar>
+        <ion-title>Filter by type</ion-title>
+        <ion-buttons slot="end">
+          <ion-button aria-label="Close filter" (click)="closeSheet()">
+            <ion-icon slot="icon-only" name="close" aria-hidden="true" />
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="sheet-grid" role="group" aria-label="Pokémon types">
+        @for (type of types(); track type) {
+          <button
+            type="button"
+            class="chip chip--block"
+            [class.chip--on]="isDraftOn(type)"
+            [attr.aria-pressed]="isDraftOn(type)"
+            (click)="toggleDraft(type)"
+          >
+            {{ type }}
+          </button>
+        }
+      </div>
+
+      <div class="sheet-actions">
+        @if (draft().length) {
+          <ion-button fill="clear" (click)="clearDraft()">Clear</ion-button>
+        }
+        <ion-button expand="block" (click)="apply()">Apply</ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>
