@@ -1,0 +1,76 @@
+.grid {
+  display: grid;
+  /* 2-up on mobile per wireframe; widens with the viewport. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--app-grid-gap);
+  padding: 16px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.skeleton {
+  aspect-ratio: 3 / 4;
+  border-radius: var(--app-radius);
+  background: rgb(0 0 0 / 0.06);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.notice {
+  margin: 0;
+  padding: 24px 16px;
+  text-align: center;
+  color: #616161;
+}
+
+.notice--error {
+  color: #b3261e;
+}
+
+.retry,
+.load-more__button {
+  margin-top: 8px;
+  padding: 10px 20px;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.load-more {
+  display: grid;
+  place-items: center;
+  padding: 8px 16px 32px;
+}
+
+/* Segment lives in the desktop header only; mobile uses the bottom tab bar. */
+.nav-segment {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 24px;
+  }
+
+  .nav-segment {
+    display: flex;
+    width: auto;
+    max-width: 240px;
+    margin-right: 12px;
+  }
+}

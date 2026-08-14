@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Pokédex</ion-title>
+
+    <!-- Desktop counterpart of the mobile tab bar (wireframe 1a header). -->
+    <ion-segment
+      class="nav-segment"
+      slot="end"
+      value="all"
+      (ionChange)="onSegmentChange($event.detail.value)"
+    >
+      <ion-segment-button value="all">All</ion-segment-button>
+      <ion-segment-button value="favorites">Favorites</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <app-type-filter [types]="types()" [(selected)]="selectedTypes" />
+</ion-header>
+
+<ion-content>
+  <p class="sr-only" role="status" aria-live="polite">{{ resultSummary() }}</p>
+
+  <div class="grid">
+    @for (pokemon of items(); track pokemon.id) {
+      <app-pokemon-card
+        [pokemon]="pokemon"
+        [isFavorite]="favorites.isFavorite(pokemon.id)"
+        (favoriteToggled)="onFavoriteToggled($event)"
+      />
+    }
+
+    <!-- Skeletons occupy grid cells so the layout does not jump on append. -->
+    @if (loading()) {
+      @for (skeleton of skeletons; track $index) {
+        <div class="skeleton" aria-hidden="true"></div>
+      }
+    }
+  </div>
+
+  @if (isEmpty()) {
+    <p class="notice">No Pokémon match that combination of types.</p>
+  }
+
+  @if (error()) {
+    <div class="notice notice--error" role="alert">
+      <p>{{ error() }}</p>
+      <button type="button" class="retry" (click)="loadMore()">Retry</button>
+    </div>
+  }
+
+  <!-- Explicit control so paging is reachable without a mouse wheel. -->
+  @if (hasMore() && !error()) {
+    <div class="load-more">
+      @if (loading()) {
+        <ion-spinner aria-label="Loading more Pokémon" />
+      } @else {
+        <button type="button" class="load-more__button" (click)="loadMore()">
+          Load more Pokémon
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Scroll trigger. loadMore() guards on `loading`, so overlapping with the
+       button above cannot double-fetch. -->
+  <ion-infinite-scroll [disabled]="!hasMore() || !!error()" (ionInfinite)="onInfiniteScroll($event)">
+    <ion-infinite-scroll-content loadingSpinner="crescent" />
+  </ion-infinite-scroll>
+</ion-content>
