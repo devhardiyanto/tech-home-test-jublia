@@ -1,8 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <!-- Wireframe 1b: back is the only way out of this screen. -->
-      <ion-back-button defaultHref="/pokemon" text="Back" />
+      <!-- Wireframe 1b: back is the only way out of this screen.
+           Icon only; the label stays for screen readers. -->
+      <ion-back-button defaultHref="/pokemon" text="" aria-label="Back to list" />
     </ion-buttons>
 
     <ion-title class="detail__title">{{ detail.value()?.name ?? 'Pokémon' }}</ion-title>
