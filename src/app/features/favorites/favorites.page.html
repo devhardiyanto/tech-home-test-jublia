@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Favorites</ion-title>
+
+    <ion-segment
+      class="nav-segment"
+      slot="end"
+      value="favorites"
+      (ionChange)="onSegmentChange($event.detail.value)"
+    >
+      <ion-segment-button value="all">All</ion-segment-button>
+      <ion-segment-button value="favorites">Favorites</ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (favorites.isEmpty()) {
+    <!-- Tab bar stays visible so the user can hop back to All (wireframe 1c). -->
+    <app-empty-state
+      icon="heart-outline"
+      title="No favorites yet"
+      message="Tap the heart on any Pokémon to save it here. Your picks stay on this device."
+      ctaLabel="Browse all Pokémon"
+      ctaLink="/pokemon"
+    />
+  } @else {
+    <p class="count" role="status" aria-live="polite">{{ favorites.count() }} saved</p>
+
+    @if (loading() && items().length === 0) {
+      <div class="status">
+        <ion-spinner aria-label="Loading favorites" />
+      </div>
+    }
+
+    <div class="grid">
+      @for (pokemon of items(); track pokemon.id) {
+        <app-pokemon-card
+          [pokemon]="pokemon"
+          [isFavorite]="true"
+          (favoriteToggled)="onFavoriteToggled($event)"
+        />
+      }
+    </div>
+  }
+</ion-content>
