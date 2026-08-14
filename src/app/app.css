@@ -1,0 +1,7 @@
+/* Wireframe puts the tab bar on mobile only; desktop navigates via the
+   header segment, so drop it once the viewport can host both side by side. */
+@media (min-width: 1024px) {
+  .app-tabs {
+    display: none;
+  }
+}
